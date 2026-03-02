@@ -178,3 +178,17 @@ export async function uploadPictureByUrl(
     ...(options || {}),
   })
 }
+/** 此处后端没有提供注释 POST /picture/upload/batch */
+export async function uploadPictureByBatch(
+  body: API.PictureUploadByBatchRequest,
+  options?: { [key: string]: any },
+) {
+  return request<API.BaseResponseInteger>('/picture/upload/batch', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  })
+}
