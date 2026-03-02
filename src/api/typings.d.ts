@@ -166,6 +166,10 @@ declare namespace API {
     editTime?: string
     updateTime?: string
     isDelete?: number
+    reviewStatus?: number
+    reviewMessage?: string
+    reviewerId?: number
+    reviewTime?: string
   }
 
   type PictureEditRequest = {
@@ -193,6 +197,15 @@ declare namespace API {
     picFormat?: string
     searchText?: string
     userId?: number
+    reviewStatus?: number
+    reviewMessage?: string
+    reviewerId?: number
+  }
+
+  type PictureReviewRequest = {
+    id?: number
+    reviewStatus?: number
+    reviewMessage?: string
   }
 
   type PictureTagCategory = {
