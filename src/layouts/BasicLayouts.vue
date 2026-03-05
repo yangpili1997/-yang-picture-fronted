@@ -4,11 +4,14 @@
       <a-layout-header class="header">
         <GlobalHeader />
       </a-layout-header>
-      <a-layout-content class="content">
-        <router-view />
-      </a-layout-content>
+      <a-layout>
+        <GlobalSpave class="sider" />
+        <a-layout-content class="content">
+          <router-view />
+        </a-layout-content>
+      </a-layout>
       <a-layout-footer class="footer">
-        <a href="https://www.codefather.cn" target="_blank"> 编程导航 by 程序员鱼皮 </a>
+        <a href="" target="_blank"> 编程 程序员 </a>
       </a-layout-footer>
     </a-layout>
   </div>
@@ -16,6 +19,7 @@
 
 <script setup lang="ts">
 import GlobalHeader from '@/components/GlobalHeader.vue'
+import GlobalSpave from '@/components/GlobalSpave.vue'
 </script>
 
 <style scoped>

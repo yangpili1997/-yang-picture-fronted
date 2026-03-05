@@ -86,6 +86,21 @@ export async function listPictureVoByPage(
   })
 }
 
+/** 此处后端没有提供注释 POST /picture/list/page/vo/cache */
+export async function listPictureVoByPageWithCache(
+  body: API.PictureQueryRequest,
+  options?: { [key: string]: any },
+) {
+  return request<API.BaseResponsePagePictureVO>('/picture/list/page/vo/cache', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  })
+}
+
 /** 此处后端没有提供注释 POST /picture/review */
 export async function doPictureReview(
   body: API.PictureReviewRequest,
@@ -124,6 +139,7 @@ export async function updatePicture(
   })
 }
 
+/** 此处后端没有提供注释 POST /picture/upload */
 export async function uploadPicture(
   params: API.uploadPictureParams,
   body: {
@@ -164,12 +180,13 @@ export async function uploadPicture(
     ...(options || {}),
   })
 }
-/** 此处后端没有提供注释 POST /picture/upload/url */
-export async function uploadPictureByUrl(
-  body: API.PictureUploadRequest,
+
+/** 此处后端没有提供注释 POST /picture/upload/batch */
+export async function uploadPictureByBatch(
+  body: API.PictureUploadByBatchRequest,
   options?: { [key: string]: any },
 ) {
-  return request<API.BaseResponsePictureVO>('/picture/upload/url', {
+  return request<API.BaseResponseInteger>('/picture/upload/batch', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -178,12 +195,13 @@ export async function uploadPictureByUrl(
     ...(options || {}),
   })
 }
-/** 此处后端没有提供注释 POST /picture/upload/batch */
-export async function uploadPictureByBatch(
-  body: API.PictureUploadByBatchRequest,
+
+/** 此处后端没有提供注释 POST /picture/upload/url */
+export async function uploadPictureByUrl(
+  body: API.PictureUploadRequest,
   options?: { [key: string]: any },
 ) {
-  return request<API.BaseResponseInteger>('/picture/upload/batch', {
+  return request<API.BaseResponsePictureVO>('/picture/upload/url', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

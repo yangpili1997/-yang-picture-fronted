@@ -193,6 +193,7 @@ const pagination = computed(() => {
 const fetchData = async () => {
   const res = await listPictureByPage({
     ...searchParams,
+    nullSpaceId: true,
   })
   if (res.data.data) {
     dataList.value = res.data.data.records ?? []
