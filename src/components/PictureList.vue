@@ -29,6 +29,14 @@
                   </a-tag>
                 </a-flex>
                 <template v-if="showOp">
+                  <a-space @click="(e) => doShare(picture, e)">
+                    <share-modal ref="shareModalRef" :link="shareLink" />
+                    分享
+                  </a-space>
+                  <a-space @click="(e) => doSearch(picture, e)">
+                    <search-outlined />
+                    搜索
+                  </a-space>
                   <a-space @click="(e) => doEdit(picture, e)">
                     <edit-outlined />
                     编辑
@@ -49,9 +57,16 @@
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons-vue'
+import {
+  DeleteOutlined,
+  EditOutlined,
+  SearchOutlined,
+  ShareAltOutlined,
+} from '@ant-design/icons-vue'
 import { deletePicture } from '@/api/pictureController'
 import { message } from 'ant-design-vue'
+import ShareModal from './ShareModal.vue'
+import { ref } from 'vue'
 interface Props {
   dataList?: API.PictureVO[]
   loading?: boolean
@@ -102,6 +117,24 @@ interface Props {
   loading?: boolean
   showOp?: boolean
   onReload?: () => void
+}
+// 搜索
+const doSearch = (picture, e) => {
+  e.stopPropagation()
+  window.open(`/search_picture?pictureId=${picture.id}`)
+}
+// 分享弹窗引用
+const shareModalRef = ref()
+// 分享链接
+const shareLink = ref<string>()
+
+// 分享
+const doShare = (picture: API.PictureVO, e: Event) => {
+  e.stopPropagation()
+  shareLink.value = `${window.location.protocol}//${window.location.host}/picture/${picture.id}`
+  if (shareModalRef.value) {
+    shareModalRef.value.openModal()
+  }
 }
 </script>
 

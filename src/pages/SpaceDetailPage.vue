@@ -7,6 +7,7 @@
         <a-button type="primary" :href="`/add_picture?spaceId=${id}`" target="_blank">
           + 创建图片
         </a-button>
+        <a-button @click="doBatchEdit"> 批量编辑</a-button>
         <a-tooltip
           :title="`占用空间 ${formatSize(space.totalSize)} / ${formatSize(space.maxSize)}`"
         >
@@ -18,6 +19,12 @@
         </a-tooltip>
       </a-space>
     </a-flex>
+    <!-- 搜索表单 -->
+    <PictureSearchForm :onSearch="onSearch" />
+    <!-- 按颜色搜索 -->
+    <a-form-item label="按颜色搜索" style="margin-top: 16px">
+      <color-picker format="hex" @pureColorChange="onColorChange" />
+    </a-form-item>
     <!-- 图片列表 -->
     <p-icture-list :dataList="dataList" :loading="loading" :showOp="true" :onReload="fetchData" />
     <a-pagination
@@ -28,16 +35,26 @@
       :show-total="() => `图片总数 ${total} / ${space.maxCount}`"
       @change="onPageChange"
     />
+    <batch-edit-picture-modal
+      ref="batchEditPictureModalRef"
+      :spaceId="id"
+      :pictureList="dataList"
+      :onSuccess="onBatchEditPictureSuccess"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import { listPictureVoByPage } from '@/api/pictureController'
+import { listPictureVoByPage, searchPictureByColor } from '@/api/pictureController'
 import { getSpaceVoById } from '@/api/spaceController'
+import BatchEditPictureModal from '@/components/BatchEditPictureModal.vue'
 import PIctureList from '@/components/PIctureList.vue'
+import PictureSearchForm from '@/components/PictureSearchForm.vue'
 import { formatSize } from '@/utils'
 import { message } from 'ant-design-vue'
 import { onMounted, reactive, ref } from 'vue'
+import { ColorPicker } from 'vue3-colorpicker'
+import 'vue3-colorpicker/style.css'
 
 const props = defineProps<{
   id: string | number
@@ -83,6 +100,15 @@ const onPageChange = (page, pageSize) => {
   searchParams.pageSize = pageSize
   fetchData()
 }
+//搜索
+const onSearch = (newSearchParams: API.PictureQueryRequest) => {
+  searchParams.value = {
+    ...searchParams.value,
+    ...newSearchParams,
+    current: 1,
+  }
+  fetchData()
+}
 
 // 获取数据
 const fetchData = async () => {
@@ -90,7 +116,7 @@ const fetchData = async () => {
   // 转换搜索参数
   const params = {
     spaceId: props.id,
-    ...searchParams,
+    ...searchParams.value,
   }
   const res = await listPictureVoByPage(params)
   if (res.data.data) {
@@ -106,6 +132,32 @@ const fetchData = async () => {
 onMounted(() => {
   fetchData()
 })
+const onColorChange = async (color: string) => {
+  const res = await searchPictureByColor({
+    picColor: color,
+    spaceId: props.id,
+  })
+  if (res.data.code === 0 && res.data.data) {
+    const data = res.data.data ?? []
+    dataList.value = data
+    total.value = data.length
+  } else {
+    message.error('获取数据失败，' + res.data.message)
+  }
+}
+// 分享弹窗引用
+const batchEditPictureModalRef = ref()
+
+// 批量编辑成功后，刷新数据
+const onBatchEditPictureSuccess = () => {
+  fetchData()
+}
+// 打开批量编辑弹窗
+const doBatchEdit = () => {
+  if (batchEditPictureModalRef.value) {
+    batchEditPictureModalRef.value.openModal()
+  }
+}
 </script>
 
 <style scoped></style>
