@@ -13,3 +13,8 @@ app.use(router)
 app.use(Antd)
 app.use(createPinia())
 app.mount('#app')
+
+import VueCropper from 'vue-cropper'
+import 'vue-cropper/dist/index.css'
+
+app.use(VueCropper)

@@ -5,6 +5,18 @@ declare namespace API {
     message?: string
   }
 
+  type BaseResponseCreateOutPaintingTaskResponse = {
+    code?: number
+    data?: CreateOutPaintingTaskResponse
+    message?: string
+  }
+
+  type BaseResponseGetOutPaintingTaskResponse = {
+    code?: number
+    data?: GetOutPaintingTaskResponse
+    message?: string
+  }
+
   type BaseResponseInteger = {
     code?: number
     data?: number
@@ -119,12 +131,33 @@ declare namespace API {
     message?: string
   }
 
+  type CreateOutPaintingTaskResponse = {
+    output?: Output
+    code?: string
+    message?: string
+    requestId?: string
+  }
+
+  type CreatePictureOutPaintingTaskRequest = {
+    pictureId?: number
+    parameters?: Parameters
+  }
+
   type DeleteRequest = {
     id?: number
   }
 
+  type GetOutPaintingTaskResponse = {
+    requestId?: string
+    output?: Output
+  }
+
   type getPictureByIdParams = {
     id: number
+  }
+
+  type getPictureOutPaintingTaskParams = {
+    taskId: string
   }
 
   type getPictureVOByIdParams = {
@@ -166,6 +199,11 @@ declare namespace API {
   type OrderItem = {
     column?: string
     asc?: boolean
+  }
+
+  type Output = {
+    taskId?: string
+    taskStatus?: string
   }
 
   type PagePicture = {
@@ -236,6 +274,20 @@ declare namespace API {
     maxLimit?: number
     countId?: string
     pages?: number
+  }
+
+  type Parameters = {
+    angle?: number
+    outputRatio?: string
+    topOffset?: number
+    bottomOffset?: number
+    leftOffset?: number
+    rightOffset?: number
+    bestQuality?: boolean
+    limitImageSize?: boolean
+    addWatermark?: boolean
+    xScale?: number
+    yScale?: number
   }
 
   type Picture = {
