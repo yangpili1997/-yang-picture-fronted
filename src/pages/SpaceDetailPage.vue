@@ -7,6 +7,9 @@
         <a-button type="primary" :href="`/add_picture?spaceId=${id}`" target="_blank">
           + 创建图片
         </a-button>
+        <a-button type="primary" ghost :href="`/space_analyze?spaceId=${id}`" target="_blank">
+          空间分析
+        </a-button>
         <a-button @click="doBatchEdit"> 批量编辑</a-button>
         <a-tooltip
           :title="`占用空间 ${formatSize(space.totalSize)} / ${formatSize(space.maxSize)}`"
