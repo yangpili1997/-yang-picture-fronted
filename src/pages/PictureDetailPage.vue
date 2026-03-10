@@ -80,7 +80,7 @@
               <EditOutlined />
             </template>
           </a-button>
-          <a-button v-if="canEdit" danger @click="doDelete">
+          <a-button v-if="canDelete" danger @click="doDelete">
             删除
             <template #icon>
               <DeleteOutlined />
@@ -96,6 +96,7 @@
 <script setup lang="ts">
 import { deletePicture, getPictureVoById } from '@/api/pictureController'
 import ShareModal from '@/components/ShareModal.vue'
+import { SPACE_PERMISSION_ENUM } from '@/constants/space'
 import router from '@/router'
 import { useLoginUserStore } from '@/stores/useLoginUserStore'
 import { downloadImage, formatSize } from '@/utils'
@@ -125,18 +126,6 @@ const fetchPictureDetail = async () => {
 
 onMounted(() => {
   fetchPictureDetail()
-})
-const loginUserStore = useLoginUserStore()
-// 是否具有编辑权限
-const canEdit = computed(() => {
-  const loginUser = loginUserStore.loginUser
-  // 未登录不可编辑
-  if (!loginUser.id) {
-    return false
-  }
-  // 仅本人或管理员可编辑
-  const user = picture.value.user || {}
-  return loginUser.id === user.id || loginUser.userRole === 'admin'
 })
 // 编辑
 const doEdit = () => {
@@ -177,6 +166,16 @@ const doShare = () => {
     shareModalRef.value.openModal()
   }
 }
+// 通用权限检查函数
+function createPermissionChecker(permission: string) {
+  return computed(() => {
+    return (picture.value.permissionList ?? []).includes(permission)
+  })
+}
+
+// 定义权限检查
+const canEdit = createPermissionChecker(SPACE_PERMISSION_ENUM.PICTURE_EDIT)
+const canDelete = createPermissionChecker(SPACE_PERMISSION_ENUM.PICTURE_DELETE)
 </script>
 
 <style scoped></style>

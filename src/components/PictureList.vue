@@ -37,11 +37,11 @@
                     <search-outlined />
                     搜索
                   </a-space>
-                  <a-space @click="(e) => doEdit(picture, e)">
+                  <a-space v-if="canEdit" @click="(e) => doEdit(picture, e)">
                     <edit-outlined />
                     编辑
                   </a-space>
-                  <a-space @click="(e) => doDelete(picture, e)">
+                  <a-space v-if="canDelete" @click="(e) => doDelete(picture, e)">
                     <delete-outlined />
                     删除
                   </a-space>
@@ -67,14 +67,22 @@ import { deletePicture } from '@/api/pictureController'
 import { message } from 'ant-design-vue'
 import ShareModal from './ShareModal.vue'
 import { ref } from 'vue'
+
 interface Props {
   dataList?: API.PictureVO[]
   loading?: boolean
+  showOp?: boolean
+  onReload?: () => void
+  canEdit?: boolean
+  canDelete?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
   dataList: () => [],
   loading: false,
+  showOp: false,
+  canEdit: false,
+  canDelete: false,
 })
 
 // 跳转至图片详情
@@ -111,12 +119,6 @@ const doDelete = async (picture, e) => {
   } else {
     message.error('删除失败')
   }
-}
-interface Props {
-  dataList?: API.PictureVO[]
-  loading?: boolean
-  showOp?: boolean
-  onReload?: () => void
 }
 // 搜索
 const doSearch = (picture, e) => {
