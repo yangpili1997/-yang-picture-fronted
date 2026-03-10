@@ -21,31 +21,29 @@
       </a-form-item>
     </a-form>
     <a-table :columns="columns" :data-source="dataList">
-      <a-table :columns="columns" :data-source="dataList">
-        <template #bodyCell="{ column, record }">
-          <template v-if="column.dataIndex === 'userInfo'">
-            <a-space>
-              <a-avatar :src="record.user?.userAvatar" />
-              {{ record.user?.userName }}
-            </a-space>
-          </template>
-          <template v-if="column.dataIndex === 'spaceRole'">
-            <a-select
-              v-model:value="record.spaceRole"
-              :options="SPACE_ROLE_OPTIONS"
-              @change="(value) => editSpaceRole(value, record)"
-            />
-          </template>
-          <template v-else-if="column.dataIndex === 'createTime'">
-            <!-- {{ dayjs(record.createTime).format('YYYY-MM-DD HH:mm:ss') }} -->
-          </template>
-          <template v-else-if="column.key === 'action'">
-            <a-space wrap>
-              <a-button type="link" danger @click="doDelete(record.id)">删除</a-button>
-            </a-space>
-          </template>
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.dataIndex === 'userInfo'">
+          <a-space>
+            <a-avatar :src="record.user?.userAvatar" />
+            {{ record.user?.userName }}
+          </a-space>
         </template>
-      </a-table>
+        <template v-if="column.dataIndex === 'spaceRole'">
+          <a-select
+            v-model:value="record.spaceRole"
+            :options="SPACE_ROLE_OPTIONS"
+            @change="(value) => editSpaceRole(value, record)"
+          />
+        </template>
+        <template v-else-if="column.dataIndex === 'createTime'">
+          <!-- {{ dayjs(record.createTime).format('YYYY-MM-DD HH:mm:ss') }} -->
+        </template>
+        <template v-else-if="column.key === 'action'">
+          <a-space wrap>
+            <a-button type="link" danger @click="doDelete(record.id)">删除</a-button>
+          </a-space>
+        </template>
+      </template>
     </a-table>
   </div>
 </template>
